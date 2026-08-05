@@ -1,4 +1,4 @@
-const resultado = document.getElementById("resultado");
+const resultado = document.getElementById("resultado"); 
 
 function mostrarResultado(mensagem, sucesso = false) {
     resultado.innerHTML = mensagem;
