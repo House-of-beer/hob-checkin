@@ -1,12 +1,16 @@
 const resultado = document.getElementById("resultado");
 
-
 const URL_API = "/api/checkin";
 
 
 function mostrarResultado(mensagem, sucesso = false) {
 
     resultado.innerHTML = mensagem;
+
+    resultado.style.padding = "20px";
+    resultado.style.marginTop = "20px";
+    resultado.style.borderRadius = "10px";
+    resultado.style.color = "white";
 
     resultado.style.background = sucesso
         ? "#0a7d32"
@@ -19,8 +23,12 @@ function mostrarResultado(mensagem, sucesso = false) {
 function onScanSuccess(decodedText) {
 
 
+    // Evita várias leituras seguidas
+    scanner.clear();
+
+
     mostrarResultado(
-        "🔎 Consultando ingresso..."
+        "🔎 QR Code escaneado!<br>Consultando ingresso..."
     );
 
 
@@ -38,7 +46,8 @@ function onScanSuccess(decodedText) {
 
             mostrarResultado(
 
-                "✅ Entrada liberada<br><br>" +
+                "✅ QR Code válido!<br><br>" +
+                "Entrada liberada 🎉<br><br>" +
                 "Nome: " + data.nome +
                 "<br>Lote: " + data.lote,
 
@@ -51,7 +60,9 @@ function onScanSuccess(decodedText) {
 
 
             mostrarResultado(
-                "❌ " + data.mensagem
+
+                data.mensagem
+
             );
 
 
@@ -59,6 +70,7 @@ function onScanSuccess(decodedText) {
 
 
     })
+
 
     .catch(error => {
 
