@@ -3,7 +3,9 @@ export async function onRequest(context) {
   const urlAPI = "https://script.google.com/macros/s/AKfycbw7mxurQn2PD5S-mPWLKGoTAh-39xerb_Pj0CtPh08x3R7qd8dh5rFhSKNvVEyzLtPn4g/exec";
 
 
-  const codigo = context.request.url.split("?codigo=")[1];
+  const url = new URL(context.request.url);
+
+  const codigo = url.searchParams.get("codigo");
 
 
   if (!codigo) {
@@ -24,15 +26,15 @@ export async function onRequest(context) {
 
 
   const resposta = await fetch(
-    urlAPI + "?codigo=" + codigo
+    urlAPI + "?codigo=" + encodeURIComponent(codigo)
   );
 
 
-  const dados = await resposta.text();
+  const texto = await resposta.text();
 
 
   return new Response(
-    dados,
+    texto,
     {
       headers: {
         "Content-Type": "application/json"
