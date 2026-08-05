@@ -1,6 +1,7 @@
 const resultado = document.getElementById("resultado");
 
-const URL_API = "https://script.google.com/macros/s/AKfycbw7mxurQn2PD5S-mPWLKGoTAh-39xerb_Pj0CtPh08x3R7qd8dh5rFhSKNvVEyzLtPn4g/exec";
+
+const URL_API = "/api/checkin";
 
 
 function mostrarResultado(mensagem, sucesso = false) {
@@ -23,30 +24,13 @@ function onScanSuccess(decodedText) {
     );
 
 
-    const url = URL_API + "?codigo=" + encodeURIComponent(decodedText);
+    fetch(
+        URL_API + "?codigo=" + encodeURIComponent(decodedText)
+    )
 
+    .then(response => response.json())
 
-    fetch(url, {
-        method: "GET",
-        mode: "cors"
-    })
-
-
-    .then(function(response) {
-
-        return response.text();
-
-    })
-
-
-    .then(function(texto) {
-
-
-        console.log(texto);
-
-
-        const data = JSON.parse(texto);
-
+    .then(data => {
 
 
         if (data.sucesso) {
@@ -76,11 +60,10 @@ function onScanSuccess(decodedText) {
 
     })
 
+    .catch(error => {
 
-    .catch(function(erro) {
 
-
-        console.log("ERRO:", erro);
+        console.log(error);
 
 
         mostrarResultado(
