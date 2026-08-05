@@ -1,52 +1,79 @@
-const resultado = document.getElementById("resultado"); 
+const resultado = document.getElementById("resultado");
+
+const URL_API = "https://script.google.com/macros/s/AKfycbwZXGi8OqaKdfTU7LmUmbA_VfGRppW1XbSGr7Ikpy0JLFT4MQCUdHRMkE3kE0v_t9mKWA/exec";
+
 
 function mostrarResultado(mensagem, sucesso = false) {
+
     resultado.innerHTML = mensagem;
 
-    if (sucesso) {
-        resultado.style.background = "#0a7d32";
-    } else {
-        resultado.style.background = "#8b0000";
-    }
+    resultado.style.background = sucesso 
+        ? "#0a7d32" 
+        : "#8b0000";
+
 }
+
+
+
+function consultarIngresso(codigo) {
+
+
+    const url = URL_API + "?codigo=" + encodeURIComponent(codigo);
+
+
+    const iframe = document.createElement("iframe");
+
+    iframe.style.display = "none";
+
+    iframe.src = url;
+
+
+    document.body.appendChild(iframe);
+
+
+}
+
+
 
 function onScanSuccess(decodedText) {
 
+
     mostrarResultado("🔎 Consultando ingresso...");
 
-    fetch("https://script.google.com/macros/s/SEU_LINK_DO_APPS_SCRIPT/exec?codigo=" + decodedText)
-        .then(response => response.json())
-        .then(data => {
 
-            if (data.sucesso) {
+    fetch(
+        URL_API + "?codigo=" + encodeURIComponent(decodedText),
+        {
+            method: "GET",
+            mode: "no-cors"
+        }
+    )
 
-                mostrarResultado(
-                    "✅ Entrada liberada<br><br>" +
-                    "Nome: " + data.nome +
-                    "<br>Lote: " + data.lote,
-                    true
-                );
+    .then(() => {
 
-            } else {
 
-                mostrarResultado(
-                    "❌ " + data.mensagem
-                );
+        setTimeout(() => {
 
-            }
+            location.reload();
 
-        })
-        .catch(error => {
+        }, 1500);
 
-            mostrarResultado(
-                "Erro ao consultar ingresso"
-            );
 
-            console.log(error);
+    })
 
-        });
+    .catch(() => {
+
+
+        mostrarResultado(
+            "❌ Erro ao consultar ingresso"
+        );
+
+
+    });
+
 
 }
+
 
 
 function onScanFailure(error) {
@@ -54,16 +81,24 @@ function onScanFailure(error) {
 }
 
 
-let scanner = new Html5QrcodeScanner(
+
+const scanner = new Html5QrcodeScanner(
+
     "reader",
+
     {
         fps: 10,
         qrbox: 250
     }
+
 );
 
 
+
 scanner.render(
+
     onScanSuccess,
+
     onScanFailure
+
 );
