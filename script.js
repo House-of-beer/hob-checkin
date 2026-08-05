@@ -7,29 +7,9 @@ function mostrarResultado(mensagem, sucesso = false) {
 
     resultado.innerHTML = mensagem;
 
-    resultado.style.background = sucesso 
-        ? "#0a7d32" 
+    resultado.style.background = sucesso
+        ? "#0a7d32"
         : "#8b0000";
-
-}
-
-
-
-function consultarIngresso(codigo) {
-
-
-    const url = URL_API + "?codigo=" + encodeURIComponent(codigo);
-
-
-    const iframe = document.createElement("iframe");
-
-    iframe.style.display = "none";
-
-    iframe.src = url;
-
-
-    document.body.appendChild(iframe);
-
 
 }
 
@@ -42,30 +22,53 @@ function onScanSuccess(decodedText) {
 
 
     fetch(
-        URL_API + "?codigo=" + encodeURIComponent(decodedText),
-        {
-            method: "GET",
-            mode: "no-cors"
-        }
+        URL_API + "?codigo=" + encodeURIComponent(decodedText)
     )
 
-    .then(() => {
+    .then(response => response.json())
+
+    .then(data => {
 
 
-        setTimeout(() => {
+        if (data.sucesso) {
 
-            location.reload();
 
-        }, 1500);
+            mostrarResultado(
+
+                "✅ Entrada liberada<br><br>" +
+                "Nome: " + data.nome +
+                "<br>Lote: " + data.lote,
+
+                true
+
+            );
+
+
+        } else {
+
+
+            mostrarResultado(
+
+                "❌ " + data.mensagem
+
+            );
+
+
+        }
 
 
     })
 
-    .catch(() => {
+    .catch(error => {
+
+
+        console.log(error);
 
 
         mostrarResultado(
+
             "❌ Erro ao consultar ingresso"
+
         );
 
 
