@@ -23,13 +23,30 @@ function onScanSuccess(decodedText) {
     );
 
 
-    fetch(
-        URL_API + "?codigo=" + encodeURIComponent(decodedText)
-    )
+    const url = URL_API + "?codigo=" + encodeURIComponent(decodedText);
 
-    .then(response => response.json())
 
-    .then(data => {
+    fetch(url, {
+        method: "GET",
+        mode: "cors"
+    })
+
+
+    .then(function(response) {
+
+        return response.text();
+
+    })
+
+
+    .then(function(texto) {
+
+
+        console.log(texto);
+
+
+        const data = JSON.parse(texto);
+
 
 
         if (data.sucesso) {
@@ -50,9 +67,7 @@ function onScanSuccess(decodedText) {
 
 
             mostrarResultado(
-
                 "❌ " + data.mensagem
-
             );
 
 
@@ -61,10 +76,11 @@ function onScanSuccess(decodedText) {
 
     })
 
-    .catch(error => {
+
+    .catch(function(erro) {
 
 
-        console.log(error);
+        console.log("ERRO:", erro);
 
 
         mostrarResultado(
