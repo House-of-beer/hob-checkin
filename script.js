@@ -1,6 +1,6 @@
 const resultado = document.getElementById("resultado");
 
-const URL_API = "https://script.google.com/macros/s/AKfycbwZXGi8OqaKdfTU7LmUmbA_VfGRppW1XbSGr7Ikpy0JLFT4MQCUdHRMkE3kE0v_t9mKWA/exec";
+const URL_API = "https://script.google.com/macros/s/AKfycbw7mxurQn2PD5S-mPWLKGoTAh-39xerb_Pj0CtPh08x3R7qd8dh5rFhSKNvVEyzLtPn4g/exec";
 
 
 function mostrarResultado(mensagem, sucesso = false) {
@@ -18,7 +18,9 @@ function mostrarResultado(mensagem, sucesso = false) {
 function onScanSuccess(decodedText) {
 
 
-    mostrarResultado("🔎 Consultando ingresso...");
+    mostrarResultado(
+        "🔎 Consultando ingresso..."
+    );
 
 
     fetch(
@@ -66,9 +68,7 @@ function onScanSuccess(decodedText) {
 
 
         mostrarResultado(
-
             "❌ Erro ao consultar ingresso"
-
         );
 
 
